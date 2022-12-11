@@ -1,3 +1,3 @@
 export const App = () => {
-  return <div>кукусямба</div>;
+  return <div>ДЗ Номер 3</div>;
 };
