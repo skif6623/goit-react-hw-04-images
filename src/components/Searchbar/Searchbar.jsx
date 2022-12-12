@@ -1,4 +1,5 @@
 import { Formik, Form, Field } from 'formik';
+import { SearchField } from './Searchbar.styled';
 
 const initialValues = {
   querry: '',
@@ -10,7 +11,7 @@ export const Searchbar = ({ onSubmit }) => {
     resetForm();
   };
   return (
-    <header className="searchbar">
+    <SearchField className="searchbar">
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         <Form className="form">
           <button type="submit" className="button">
@@ -27,6 +28,6 @@ export const Searchbar = ({ onSubmit }) => {
           />
         </Form>
       </Formik>
-    </header>
+    </SearchField>
   );
 };

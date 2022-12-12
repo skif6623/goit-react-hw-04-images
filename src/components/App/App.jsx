@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { getImages } from '../../servise/api';
 import { Searchbar } from '../Searchbar/Searchbar';
 import { ImageGallery } from '../ImageGallery/ImageGallery';
+import { GalleryApp } from './App.styled';
+import { GlobalStyle } from '../../GlobalStyles';
 
 export class App extends Component {
   state = {
@@ -18,10 +20,11 @@ export class App extends Component {
   render() {
     const { images } = this.state;
     return (
-      <div>
+      <GalleryApp>
         <Searchbar onSubmit={this.setImageToState} />
         <ImageGallery images={images} />
-      </div>
+        <GlobalStyle />
+      </GalleryApp>
     );
   }
 }
