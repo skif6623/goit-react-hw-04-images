@@ -5,6 +5,14 @@ import { ImageGallery } from '../ImageGallery/ImageGallery';
 import { GalleryApp } from './App.styled';
 import { GlobalStyle } from '../../GlobalStyles';
 import { ModalWindow } from '../Modal/Modal';
+import MoonLoader from 'react-spinners/ClipLoader';
+
+const override = {
+  display: 'block',
+  margin: 'auto',
+  borderColor: 'blue',
+};
+
 export class App extends Component {
   state = {
     images: [],
@@ -12,10 +20,14 @@ export class App extends Component {
     isLoading: false,
   };
 
-  setImageToState = async items => {
+  setImageToState = async querry => {
+    if (querry === '') {
+      console.log('введіть слово');
+      return;
+    }
     try {
       this.setState({ isLoading: true });
-      const images = await getImages(items);
+      const images = await getImages(querry);
       this.setState({
         images: images.hits,
       });
@@ -43,10 +55,17 @@ export class App extends Component {
 
   render() {
     const { images, url, isLoading } = this.state;
+
     return (
       <GalleryApp>
         <Searchbar onSubmit={this.setImageToState} />
-        {isLoading && <p>Загрузка...</p>}
+        <MoonLoader
+          loading={isLoading}
+          cssOverride={override}
+          size={150}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
         <ImageGallery images={images} getUrl={this.getModalimageUrl} />
         {url && <ModalWindow url={url} closeModal={this.closeModal} />}
         <GlobalStyle />

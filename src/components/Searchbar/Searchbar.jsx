@@ -21,7 +21,7 @@ export const Searchbar = ({ onSubmit }) => {
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         <SearchForm>
           <SearchButton type="submit">
-            <SearchButtonLabel>Search</SearchButtonLabel>
+            <SearchButtonLabel></SearchButtonLabel>
           </SearchButton>
 
           <Field
