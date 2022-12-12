@@ -1,19 +1,32 @@
-export const Searchbar = props => {
-  return (
-    <header class="searchbar">
-      <form class="form">
-        <button type="submit" class="button">
-          <span class="button-label">Search</span>
-        </button>
+import { Formik, Form, Field } from 'formik';
 
-        <input
-          class="input"
-          type="text"
-          autocomplete="off"
-          autofocus
-          placeholder="Search images and photos"
-        />
-      </form>
+const initialValues = {
+  querry: '',
+};
+
+export const Searchbar = ({ onSubmit }) => {
+  const handleSubmit = async (values, { resetForm }) => {
+    await onSubmit(values.querry);
+    resetForm();
+  };
+  return (
+    <header className="searchbar">
+      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        <Form className="form">
+          <button type="submit" className="button">
+            <span className="button-label">Search</span>
+          </button>
+
+          <Field
+            className="input"
+            type="text"
+            name="querry"
+            autoComplete="true"
+            autoFocus
+            placeholder="Search images and photos"
+          />
+        </Form>
+      </Formik>
     </header>
   );
 };
