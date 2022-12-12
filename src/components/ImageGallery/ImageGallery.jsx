@@ -1,12 +1,18 @@
+import {
+  GalleryList,
+  GalleryListItem,
+  GalleryListImage,
+} from './ImageGallery.styled';
+
 export const ImageGallery = ({ images }) => {
   console.log(images);
   return (
-    <ul className="gallery">
+    <GalleryList>
       {images.map(({ id, webformatURL, largeImageURL, tags }) => (
-        <li key={id}>
-          <img src={webformatURL} alt={tags} />
-        </li>
+        <GalleryListItem key={id}>
+          <GalleryListImage src={webformatURL} alt={tags} />
+        </GalleryListItem>
       ))}
-    </ul>
+    </GalleryList>
   );
 };
