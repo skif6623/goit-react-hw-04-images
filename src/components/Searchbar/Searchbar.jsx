@@ -1,5 +1,11 @@
-import { Formik, Form, Field } from 'formik';
-import { SearchField } from './Searchbar.styled';
+import { Formik, Field } from 'formik';
+import {
+  Search,
+  SearchForm,
+  SearchInput,
+  SearchButton,
+  SearchButtonLabel,
+} from './Searchbar.styled';
 
 const initialValues = {
   querry: '',
@@ -11,23 +17,23 @@ export const Searchbar = ({ onSubmit }) => {
     resetForm();
   };
   return (
-    <SearchField className="searchbar">
+    <Search>
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-        <Form className="form">
-          <button type="submit" className="button">
-            <span className="button-label">Search</span>
-          </button>
+        <SearchForm>
+          <SearchButton type="submit">
+            <SearchButtonLabel>Search</SearchButtonLabel>
+          </SearchButton>
 
           <Field
-            className="input"
+            as={SearchInput}
             type="text"
             name="querry"
             autoComplete="true"
             autoFocus
             placeholder="Search images and photos"
           />
-        </Form>
+        </SearchForm>
       </Formik>
-    </SearchField>
+    </Search>
   );
 };
