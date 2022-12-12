@@ -1,12 +1,18 @@
+import { createPortal } from 'react-dom';
 import { Overlay, Modal } from './Modal.styled';
 
-export const ModalWindow = () => {
-  return (
+const modalRoot = document.querySelector('#modal-root');
+
+export const ModalWindow = ({ closeModal, url }) => {
+  return createPortal(
     <Overlay>
-      <Modal class="modal">
-        <p>Привіт я модалка</p>
-        <img src="" alt="" />
+      <Modal>
+        <img src={url.imageUrl} alt={url.alt} />
+        <button type="button" onClick={closeModal}>
+          Закрити
+        </button>
       </Modal>
-    </Overlay>
+    </Overlay>,
+    modalRoot
   );
 };

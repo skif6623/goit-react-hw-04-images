@@ -8,7 +8,7 @@ import { ModalWindow } from '../Modal/Modal';
 export class App extends Component {
   state = {
     images: [],
-    isOpen: false,
+    url: null,
   };
 
   setImageToState = async items => {
@@ -18,19 +18,26 @@ export class App extends Component {
     });
   };
 
-  toggleModal = () => {
-    this.setState(({ isOpen }) => ({
-      isOpen: !isOpen,
-    }));
+  closeModal = () => {
+    this.setState({ url: null });
+  };
+
+  getModalimageUrl = (imageUrl, alt) => {
+    this.setState({
+      url: {
+        imageUrl,
+        alt,
+      },
+    });
   };
 
   render() {
-    const { images, isOpen } = this.state;
+    const { images, url } = this.state;
     return (
       <GalleryApp>
-        {isOpen && <ModalWindow />}
         <Searchbar onSubmit={this.setImageToState} />
-        <ImageGallery images={images} openModal={this.toggleModal} />
+        <ImageGallery images={images} getUrl={this.getModalimageUrl} />
+        {url && <ModalWindow url={url} closeModal={this.closeModal} />}
         <GlobalStyle />
       </GalleryApp>
     );
