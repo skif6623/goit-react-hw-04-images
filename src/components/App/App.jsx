@@ -9,17 +9,23 @@ export class App extends Component {
   state = {
     images: [],
     url: null,
+    isLoading: false,
   };
 
   setImageToState = async items => {
-    const images = await getImages(items);
-    this.setState({
-      images: images.hits,
-    });
-  };
-
-  closeModal = () => {
-    this.setState({ url: null });
+    try {
+      this.setState({ isLoading: true });
+      const images = await getImages(items);
+      this.setState({
+        images: images.hits,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.setState({
+        isLoading: false,
+      });
+    }
   };
 
   getModalimageUrl = (imageUrl, alt) => {
@@ -31,11 +37,16 @@ export class App extends Component {
     });
   };
 
+  closeModal = () => {
+    this.setState({ url: null });
+  };
+
   render() {
-    const { images, url } = this.state;
+    const { images, url, isLoading } = this.state;
     return (
       <GalleryApp>
         <Searchbar onSubmit={this.setImageToState} />
+        {isLoading && <p>Загрузка...</p>}
         <ImageGallery images={images} getUrl={this.getModalimageUrl} />
         {url && <ModalWindow url={url} closeModal={this.closeModal} />}
         <GlobalStyle />
