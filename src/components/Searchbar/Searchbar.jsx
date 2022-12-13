@@ -12,8 +12,8 @@ const initialValues = {
 };
 
 export const Searchbar = ({ onSubmit }) => {
-  const handleSubmit = async (values, { resetForm }) => {
-    await onSubmit(values.querry);
+  const handleSubmit = (values, { resetForm }) => {
+    onSubmit(values.querry);
     resetForm();
   };
   return (

@@ -5,39 +5,48 @@ import { ImageGallery } from '../ImageGallery/ImageGallery';
 import { GalleryApp } from './App.styled';
 import { GlobalStyle } from '../../GlobalStyles';
 import { ModalWindow } from '../Modal/Modal';
-import MoonLoader from 'react-spinners/ClipLoader';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 const override = {
   display: 'block',
-  margin: 'auto',
-  borderColor: 'blue',
+  margin: '0 auto',
+  marginTop: '250px',
 };
 
 export class App extends Component {
   state = {
+    page: 1,
+    querry: '',
     images: [],
     url: null,
     isLoading: false,
   };
 
-  setImageToState = async querry => {
-    if (querry === '') {
-      console.log('введіть слово');
-      return;
+  async componentDidUpdate(_, prevState) {
+    const { page, querry } = this.state;
+
+    if (prevState.page !== page || prevState.querry !== querry) {
+      try {
+        this.setState({ isLoading: true });
+        const images = await getImages(querry, page);
+        this.setState({
+          images: images.hits,
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.setState({
+          isLoading: false,
+        });
+      }
     }
-    try {
-      this.setState({ isLoading: true });
-      const images = await getImages(querry);
-      this.setState({
-        images: images.hits,
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      this.setState({
-        isLoading: false,
-      });
-    }
+  }
+  setQuerryToState = querry => {
+    this.setState({
+      images: [],
+      querry,
+      page: 1,
+    });
   };
 
   getModalimageUrl = (imageUrl, alt) => {
@@ -58,11 +67,12 @@ export class App extends Component {
 
     return (
       <GalleryApp>
-        <Searchbar onSubmit={this.setImageToState} />
-        <MoonLoader
+        <Searchbar onSubmit={this.setQuerryToState} />
+        <BeatLoader
+          color="#3f51b5"
           loading={isLoading}
           cssOverride={override}
-          size={150}
+          size={30}
           aria-label="Loading Spinner"
           data-testid="loader"
         />
