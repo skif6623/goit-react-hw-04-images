@@ -5,6 +5,7 @@ import { ImageGallery } from '../ImageGallery/ImageGallery';
 import { GalleryApp } from './App.styled';
 import { GlobalStyle } from '../../GlobalStyles';
 import { ModalWindow } from '../Modal/Modal';
+import { Button } from '../Button/Button';
 import BeatLoader from 'react-spinners/BeatLoader';
 
 const override = {
@@ -62,6 +63,12 @@ export class App extends Component {
     this.setState({ url: null });
   };
 
+  incrementPage = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
+  };
+
   render() {
     const { images, url, isLoading } = this.state;
 
@@ -77,6 +84,7 @@ export class App extends Component {
           data-testid="loader"
         />
         <ImageGallery images={images} getUrl={this.getModalimageUrl} />
+        <Button incrementPage={this.incrementPage} />
         {url && <ModalWindow url={url} closeModal={this.closeModal} />}
         <GlobalStyle />
       </GalleryApp>
