@@ -7,11 +7,11 @@ import { GlobalStyle } from '../../GlobalStyles';
 import { ModalWindow } from '../Modal/Modal';
 import { Button } from '../Button/Button';
 import BeatLoader from 'react-spinners/BeatLoader';
+import toast, { Toaster } from 'react-hot-toast';
 
 const override = {
   display: 'block',
   margin: '0 auto',
-  marginTop: '250px',
 };
 
 export class App extends Component {
@@ -35,6 +35,7 @@ export class App extends Component {
         }));
       } catch (error) {
         console.log(error);
+        toast.error('Помилка, перезагрузіть сторінку');
       } finally {
         this.setState({
           isLoading: false,
@@ -43,6 +44,10 @@ export class App extends Component {
     }
   }
   setQuerryToState = querry => {
+    if (querry === '') {
+      toast.error('Введіть ключове слово');
+      return;
+    }
     this.setState({
       images: [],
       querry,
@@ -85,8 +90,8 @@ export class App extends Component {
         />
         <ImageGallery images={images} getUrl={this.getModalimageUrl} />
         {images.length > 0 && <Button incrementPage={this.incrementPage} />}
-
         {url && <ModalWindow url={url} closeModal={this.closeModal} />}
+        <Toaster position="top-right" />
         <GlobalStyle />
       </GalleryApp>
     );
