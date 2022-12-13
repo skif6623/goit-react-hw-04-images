@@ -30,9 +30,9 @@ export class App extends Component {
       try {
         this.setState({ isLoading: true });
         const images = await getImages(querry, page);
-        this.setState({
-          images: images.hits,
-        });
+        this.setState(prevState => ({
+          images: [...prevState.images, ...images.hits],
+        }));
       } catch (error) {
         console.log(error);
       } finally {
@@ -84,7 +84,8 @@ export class App extends Component {
           data-testid="loader"
         />
         <ImageGallery images={images} getUrl={this.getModalimageUrl} />
-        <Button incrementPage={this.incrementPage} />
+        {images.length > 0 && <Button incrementPage={this.incrementPage} />}
+
         {url && <ModalWindow url={url} closeModal={this.closeModal} />}
         <GlobalStyle />
       </GalleryApp>
