@@ -21,6 +21,7 @@ export class App extends Component {
     images: [],
     url: null,
     isLoading: false,
+    totalPages: null,
   };
 
   async componentDidUpdate(_, prevState) {
@@ -29,10 +30,15 @@ export class App extends Component {
     if (prevState.page !== page || prevState.querry !== querry) {
       try {
         this.setState({ isLoading: true });
+
         const images = await getImages(querry, page);
-        this.setState(prevState => ({
-          images: [...prevState.images, ...images.hits],
-        }));
+
+        images.hits.length === 0
+          ? toast.error('Зображень не знайдено')
+          : this.setState(prevState => ({
+              images: [...prevState.images, ...images.hits],
+              totalPages: Math.ceil(images.total / 12),
+            }));
       } catch (error) {
         console.log(error);
         toast.error('Помилка, перезагрузіть сторінку');
@@ -75,7 +81,9 @@ export class App extends Component {
   };
 
   render() {
-    const { images, url, isLoading } = this.state;
+    const { images, url, isLoading, page, totalPages } = this.state;
+    const showButton = page < totalPages;
+    console.log(showButton);
 
     return (
       <GalleryApp>
@@ -89,7 +97,7 @@ export class App extends Component {
           data-testid="loader"
         />
         <ImageGallery images={images} getUrl={this.getModalimageUrl} />
-        {images.length > 0 && <Button incrementPage={this.incrementPage} />}
+        {showButton && <Button incrementPage={this.incrementPage} />}
         {url && <ModalWindow url={url} closeModal={this.closeModal} />}
         <Toaster position="top-right" />
         <GlobalStyle />
