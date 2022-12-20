@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import { getImages } from '../../servise/api';
 import { Searchbar } from '../Searchbar/Searchbar';
 import { ImageGallery } from '../ImageGallery/ImageGallery';
@@ -8,8 +7,7 @@ import { ModalWindow } from '../Modal/Modal';
 import { Button } from '../Button/Button';
 import BeatLoader from 'react-spinners/BeatLoader';
 import toast, { Toaster } from 'react-hot-toast';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const override = {
   display: 'block',
@@ -25,24 +23,43 @@ export const App = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (querry === '') {
+      return;
+    }
     async function fetchQuerry() {
       try {
+        setIsLoading(true);
+
         const images = await getImages(querry, page);
-        setImages(prevImages => [...prevImages, ...images.hits]);
+
+        if (images.hits.length === 0) {
+          toast.error('За вашим запитом нічого не знайдено');
+          return;
+        } else {
+          setImages(prevImages => [...prevImages, ...images.hits]);
+          setTotalPages(Math.ceil(images.total / 12));
+        }
       } catch (error) {
         toast.error('Помилка, перезагрузіть сторінку');
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchQuerry();
-  }, [page]);
+  }, [page, querry]);
 
-  const setQuerryToState = querry => {
-    if (querry === '') {
+  const setQuerryToState = newQuerry => {
+    if (newQuerry === '') {
       toast.error('Введіть ключове слово');
       return;
     }
+    if (newQuerry === querry) {
+      toast.success('Картинки за цим запитом вже на екрані');
+      return;
+    }
+
     setImages([]);
-    setQuerry(querry);
+    setQuerry(newQuerry);
     setPage(1);
   };
 
